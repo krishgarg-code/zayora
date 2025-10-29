@@ -21,7 +21,7 @@ const ProductDetailPage: React.FC = () => {
   const { isSignedIn } = useAuth();
   const productId = params.id as string;
   
-  const [selectedSize, setSelectedSize] = useState<string>('M');
+  const [selectedSize, setSelectedSize] = useState<string>('');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMessage, setAuthMessage] = useState('');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -45,6 +45,13 @@ const ProductDetailPage: React.FC = () => {
     }
 
     if (!product) return;
+
+    if (!selectedSize) {
+      setPopupMessage('Please select a size before adding to wardrobe');
+      setPopupType('error');
+      setShowPopup(true);
+      return;
+    }
 
     setIsAddingToCart(true);
     try {
@@ -90,6 +97,13 @@ const ProductDetailPage: React.FC = () => {
 
     if (!product) return;
 
+    if (!selectedSize) {
+      setPopupMessage('Please select a size before indulging');
+      setPopupType('error');
+      setShowPopup(true);
+      return;
+    }
+
     // Silently add to cart without any feedback
     try {
       await fetch('/api/cart', {
@@ -118,6 +132,13 @@ const ProductDetailPage: React.FC = () => {
       setConfirmationMessage('Sign in to access Virtual Try-On feature');
       setPendingAction(() => () => router.push('/auth'));
       setShowConfirmationPopup(true);
+      return;
+    }
+
+    if (!selectedSize) {
+      setPopupMessage('Please select a size for Virtual Try-On');
+      setPopupType('error');
+      setShowPopup(true);
       return;
     }
     
