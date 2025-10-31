@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import MyNavbar from '@/_components/Navbar';
@@ -14,12 +14,104 @@ import Popup from '@/_components/Popup';
 import ConfirmationPopup from '@/_components/ConfirmationPopup';
 import { getProductById } from '@/data/products';
 import { useAuth } from '@clerk/nextjs';
+import { motion, AnimatePresence } from 'framer-motion';
 
+const loadingMessages = [
+  "Tailoring your perfect look...",
+  "Crafting digital couture...",
+  "Refining the fit just for you...",
+  "Steaming the final details...",
+  "Adding a touch of elegance...",
+  "Polishing your virtual mirror...",
+  "Almost ready to reveal your style..."
+];
+
+const errorMessages = [
+  "Hmm... the fabric seems to have snagged. Let's try that again.",
+  "Our virtual tailor is taking a short break. Please refresh.",
+  "Looks like the wardrobe needs a quick adjustment. Try once more.",
+  "The luxury experience is momentarily on pause. We'll be right back.",
+  "Our digital stylist dropped a pin — give us a moment to recover.",
+  "Apologies, your look couldn't be rendered. Let's refit and retry.",
+  "Something went off the stitch. Refresh to perfect your look."
+];
+
+const LoadingPopup = ({ 
+  isOpen, 
+  message 
+}: { 
+  isOpen: boolean; 
+  message: string;
+}) => {
+  const [prevMessage, setPrevMessage] = React.useState(message);
+  const [isFlipping, setIsFlipping] = React.useState(false);
+
+  React.useEffect(() => {
+    if (message !== prevMessage) {
+      setIsFlipping(true);
+      const timeout = setTimeout(() => {
+        setPrevMessage(message);
+        setIsFlipping(false);
+      }, 600);
+      return () => clearTimeout(timeout);
+    }
+  }, [message, prevMessage]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.8, opacity: 0, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-10 overflow-hidden"
+          >
+            <div className="flex flex-col items-center text-center relative z-10">
+              {/* Elegant rotating ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 2.2, ease: 'linear' }}
+                className="rounded-full h-16 w-16 border-t-2 border-b-2 border-[#dab187] mb-8"
+              ></motion.div>
+
+              {/* 3D flipping text */}
+              <div className="perspective-1000 h-8">
+                <motion.p
+                  key={prevMessage}
+                  initial={{ rotateX: -90, opacity: 0, y: -10 }}
+                  animate={{ rotateX: isFlipping ? 90 : 0, opacity: 1, y: 0 }}
+                  exit={{ rotateX: 90, opacity: 0, y: 10 }}
+                  transition={{ duration: 0.6, ease: [0.45, 0, 0.55, 1] }}
+                  className="text-lg text-gray-800 font-medium"
+                  style={{ fontFamily: 'norwester', transformOrigin: 'top center' }}
+                >
+                  {prevMessage}
+                </motion.p>
+              </div>
+            </div>
+
+            {/* Subtle reflection for luxury feel */}
+            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-transparent animate-pulse pointer-events-none"></div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
 const ProductDetailPage: React.FC = () => {
   const params = useParams();
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const productId = params.id as string;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const originalImageRef = useRef<string>('');
   
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -31,9 +123,37 @@ const ProductDetailPage: React.FC = () => {
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+  const [isProcessingTryOn, setIsProcessingTryOn] = useState(false);
+  const [productImageUrl, setProductImageUrl] = useState<string>('');
+  const [loadingMessage, setLoadingMessage] = useState('');
   
   // Fetch product data from centralized source
   const product = getProductById(productId);
+  
+  // Set the initial product image URL
+  React.useEffect(() => {
+    if (product) {
+      // Ensure we have a valid image URL
+      const imageUrl = product.image || product.imageurl || "/file.svg";
+      setProductImageUrl(imageUrl);
+      originalImageRef.current = imageUrl;
+    }
+  }, [product]);
+  
+  // Rotate loading messages during virtual try-on
+  useEffect(() => {
+    if (!isProcessingTryOn) return;
+    
+    let currentIndex = 0;
+    setLoadingMessage(loadingMessages[currentIndex]);
+    
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % loadingMessages.length;
+      setLoadingMessage(loadingMessages[currentIndex]);
+    }, 2500);
+    
+    return () => clearInterval(interval);
+  }, [isProcessingTryOn]);
   
   // Handle adding to cart
   const handleAddToWardrobe = async () => {
@@ -135,17 +255,87 @@ const ProductDetailPage: React.FC = () => {
       return;
     }
 
-    if (!selectedSize) {
-      setPopupMessage('Please select a size for Virtual Try-On');
+    // Remove the size validation - virtual try-on should work without size selection
+    // Trigger file input click
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Handle file selection for virtual try-on
+  const handleTryOnFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !product) return;
+
+    setIsProcessingTryOn(true);
+    setLoadingMessage(loadingMessages[0]); // Start with the first message
+    setShowPopup(false); // Close any existing popup
+
+    try {
+      // Convert the user's file to a Base64 Data URL
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        try {
+          const userImageBase64 = reader.result as string;
+          
+          // Call our backend API for virtual try-on
+          const response = await fetch('/api/virtual-try-on', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              productImageUrl: product.imageurl || product.image,
+              userImageBase64
+            }),
+          });
+
+          const result = await response.json();
+          
+          if (response.ok && result.success) {
+            // Close the loading popup
+            setIsProcessingTryOn(false);
+            
+            // Update the product image with the generated try-on image
+            setProductImageUrl(result.imageUrl);
+          } else {
+            // Handle error - close loading popup and show error
+            setIsProcessingTryOn(false);
+            throw new Error(result.error || 'Failed to process virtual try-on');
+          }
+        } catch (error: any) {
+          console.error('Virtual Try-On Error:', error);
+          // Close loading popup
+          setIsProcessingTryOn(false);
+          
+          // Show a random error message in the regular popup
+          const randomErrorMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+          setPopupMessage(randomErrorMessage);
+          setPopupType('error');
+          setShowPopup(true);
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    } catch (error: any) {
+      console.error('File Reading Error:', error);
+      // Close loading popup even if file reading fails
+      setIsProcessingTryOn(false);
+      
+      // Show a random error message in the regular popup
+      const randomErrorMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+      setPopupMessage(randomErrorMessage);
       setPopupType('error');
       setShowPopup(true);
-      return;
+    } finally {
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
-    
-    // Implement virtual try-on logic here
-    setPopupMessage('Virtual Try On feature coming soon!');
-    setPopupType('info');
-    setShowPopup(true);
+  };
+
+  // Reset to original product image
+  const handleResetImage = () => {
+    setProductImageUrl(originalImageRef.current);
   };
 
   // Handle confirmation
@@ -191,7 +381,7 @@ const ProductDetailPage: React.FC = () => {
             {/* Wrapper for image and price tag positioning */}
             <div className="relative transform scale-[1.35]" style={{ transformOrigin: 'left center' }}>
               <OvalImageFrame 
-                src={product.image}
+                src={productImageUrl}
                 alt={product.name}
                 className=""
               />
@@ -321,12 +511,33 @@ const ProductDetailPage: React.FC = () => {
               
               <button
                 onClick={handleVirtualTryOn}
-                className="flex-1 min-w-[180px] px-8 py-3 text-sm sm:text-base font-bold uppercase border-2 border-[#C9B99E] text-[#C9B99E] tracking-wider hover:bg-[#C9B99E] hover:text-[#2E2B29] transition-all duration-300 cursor-pointer whitespace-nowrap flex items-center justify-center"
+                disabled={isProcessingTryOn}
+                className="flex-1 min-w-[180px] px-8 py-3 text-sm sm:text-base font-bold uppercase border-2 border-[#C9B99E] text-[#C9B99E] tracking-wider hover:bg-[#C9B99E] hover:text-[#2E2B29] transition-all duration-300 cursor-pointer disabled:opacity-50 whitespace-nowrap flex items-center justify-center"
                 style={{ fontFamily: 'norwester' }}
               >
-                VIRTUAL TRY ON
+                {isProcessingTryOn ? 'PROCESSING...' : 'VIRTUAL TRY ON'}
               </button>
+              
+              {/* Reset Image Button - only show when virtual try-on image is displayed */}
+              {productImageUrl !== originalImageRef.current && (
+                <button
+                  onClick={handleResetImage}
+                  className="flex-1 min-w-[180px] px-8 py-3 text-sm sm:text-base font-bold uppercase border-2 border-[#C9B99E] text-[#C9B99E] tracking-wider hover:bg-[#C9B99E] hover:text-[#2E2B29] transition-all duration-300 cursor-pointer whitespace-nowrap flex items-center justify-center"
+                  style={{ fontFamily: 'norwester' }}
+                >
+                  VIEW ORIGINAL
+                </button>
+              )}
             </div>
+            
+            {/* Hidden file input for virtual try-on */}
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleTryOnFileChange}
+              style={{ display: 'none' }}
+            />
           </div>
         </div>
 
@@ -348,7 +559,13 @@ const ProductDetailPage: React.FC = () => {
           message={confirmationMessage}
         />
 
-        {/* Popup */}
+        {/* Loading Popup - Custom component for virtual try-on loading state */}
+        <LoadingPopup 
+          isOpen={isProcessingTryOn} 
+          message={loadingMessage} 
+        />
+
+        {/* Regular Popup - used for success and error messages */}
         <Popup
           isOpen={showPopup}
           onClose={() => setShowPopup(false)}

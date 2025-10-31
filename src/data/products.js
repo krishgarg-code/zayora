@@ -16,7 +16,8 @@ export const products = [
     rating: 4.5,
     category: "bottomwear",
     range: "men",
-    image: "/mens/beige-trousers.png"
+    image: "/mens/beige-trousers.png",
+    imageurl: "https://i.postimg.cc/wxWd0Q0P/beige-trousers.png"
   },
   {
     id: 2,
@@ -27,7 +28,8 @@ export const products = [
     rating: 4.7,
     category: "bottomwear",
     range: "men",
-    image: "/mens/black-trousers.png"
+    image: "/mens/black-trousers.png",
+    imageurl: "https://i.postimg.cc/WbhcKqy4/black-trousers.png"
   },
   {
     id: 3,
@@ -38,7 +40,8 @@ export const products = [
     rating: 4.4,
     category: "bottomwear",
     range: "men",
-    image: "/mens/caramel-pants.png"
+    image: "/mens/caramel-pants.png",
+    imageurl: "https://i.postimg.cc/7YfrcJRM/caramel-pants.png"
   },
   {
     id: 4,
@@ -49,7 +52,8 @@ export const products = [
     rating: 4.8,
     category: "bottomwear",
     range: "men",
-    image: "/mens/grey-trousers.png"
+    image: "/mens/grey-trousers.png",
+    imageurl: "https://i.postimg.cc/kXzPdXr0/grey-trousers.png"
   },
   {
     id: 5,
@@ -60,7 +64,9 @@ export const products = [
     rating: 4.6,
     category: "bottomwear",
     range: "men",
-    image: "/mens/white-textured-pants.png"
+    image: "/mens/white-textured-pants.png",
+    imageurl: "https://i.postimg.cc/y8R464sx/white-textured-pants.png"
+    
   },
 
   // Men's Topwear - Polos
@@ -73,7 +79,8 @@ export const products = [
     rating: 4.3,
     category: "topwear",
     range: "men",
-    image: "/mens/bold-stripe-knit-polo.png"
+    image: "/mens/bold-stripe-knit-polo.png",
+    imageurl: "https://i.postimg.cc/PrZR5Khv/bold-stripe-knit-polo.png"
   },
   {
     id: 7,
@@ -84,7 +91,9 @@ export const products = [
     rating: 4.6,
     category: "topwear",
     range: "men",
-    image: "/mens/navy-vertical-stripe-polo.png"
+    image: "/mens/navy-vertical-stripe-polo.png",
+    imageurl: "https://i.postimg.cc/W1ZLpLjK/navy-vertical-stripe-polo.png"
+    
   },
   {
     id: 8,
@@ -95,7 +104,8 @@ export const products = [
     rating: 4.2,
     category: "topwear",
     range: "men",
-    image: "/mens/emerald-ribbed-polo.png"
+    image: "/mens/emerald-ribbed-polo.png",
+    imageurl: "https://i.postimg.cc/xThVSTr7/emerald-ribbed-polo.png"
   },
   {
     id: 9,
@@ -106,7 +116,8 @@ export const products = [
     rating: 4.1,
     category: "topwear",
     range: "men",
-    image: "/mens/cream-contrast-collar-polo.png"
+    image: "/mens/cream-contrast-collar-polo.png",
+    imageurl: "https://i.postimg.cc/X7m607Mg/cream-contrast-collar-polo.png"
   },
 
   // Men's Topwear - Shirts
@@ -119,7 +130,8 @@ export const products = [
     rating: 4.5,
     category: "topwear",
     range: "men",
-    image: "/mens/burgundy-linen-shirt.png"
+    image: "/mens/burgundy-linen-shirt.png",
+    imageurl: "https://i.postimg.cc/KvRhV3W4/burgundy-linen-shirt.png"
   },
   {
     id: 11,
@@ -130,7 +142,8 @@ export const products = [
     rating: 4.4,
     category: "topwear",
     range: "men",
-    image: "/mens/chocolate-button-down-shirt.png"
+    image: "/mens/chocolate-button-down-shirt.png",
+    imageurl: "https://i.postimg.cc/TYFvXY8r/chocolate-button-down-shirt.png"
   },
   {
     id: 12,
@@ -141,7 +154,8 @@ export const products = [
     rating: 4.3,
     category: "topwear",
     range: "men",
-    image: "/mens/wine-red-crinkle-shirt.png"
+    image: "/mens/wine-red-crinkle-shirt.png",
+    imageurl: "https://i.postimg.cc/Xv0MpHYp/wine-red-crinkle-shirt.png"
   },
   {
     id: 13,
@@ -152,7 +166,8 @@ export const products = [
     rating: 4.6,
     category: "topwear",
     range: "men",
-    image: "/mens/olive-green-casual-shirt.png"
+    image: "/mens/olive-green-casual-shirt.png",
+    imageurl: "https://i.postimg.cc/P5DsfsTd/olive-green-casual-shirt.png"
   },
   {
     id: 14,
@@ -163,7 +178,8 @@ export const products = [
     rating: 4.2,
     category: "topwear",
     range: "men",
-    image: "/mens/black-crinkle-short-sleeve.png"
+    image: "/mens/black-crinkle-short-sleeve.png",
+    imageurl: "https://i.postimg.cc/BQXfyPzb/black-crinkle-short-sleeve.png"
   },
   {
     id: 15,
@@ -174,7 +190,8 @@ export const products = [
     rating: 4.0,
     category: "topwear",
     range: "men",
-    image: "/mens/navy-minimalist-shirt.png"
+    image: "/mens/navy-minimalist-shirt.png",
+    imageurl: "https://i.postimg.cc/9FKHjF55/navy-minimalist-shirt.png"
   },
   {
     id: 16,
@@ -185,7 +202,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "men",
-    image: "/mens/sky-blue-striped-oxford.png"
+    image: "/mens/sky-blue-striped-oxford.png",
+    imageurl: "https://i.postimg.cc/0ySR5RPN/sky-blue-striped-oxford.png"
   },
 
   // ============================================
@@ -200,7 +218,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "women",
-    image: "/womens/ivory-cropped-blazer-wide-leg-pants-set.png"
+    image: "/womens/ivory-cropped-blazer-wide-leg-pants-set.png",
+    imageurl: "https://i.postimg.cc/8P2kmbCp/ivory-cropped-blazer-wide-leg-pants-set.png"
   },
   {
     id: 18,
@@ -211,7 +230,8 @@ export const products = [
     rating: 4.6,
     category: "topwear",
     range: "women",
-    image: "/womens/emerald-green-lace-tiered-chiffon-dress.png"
+    image: "/womens/emerald-green-lace-tiered-chiffon-dress.png",
+    imageurl: "https://i.postimg.cc/HscsMNdf/emerald-green-lace-tiered-chiffon-dress.png"
   },
   {
     id: 19,
@@ -222,7 +242,8 @@ export const products = [
     rating: 4.9,
     category: "topwear",
     range: "women",
-    image: "/womens/pink-tulle-ballgown-crystal-bow.png"
+    image: "/womens/pink-tulle-ballgown-crystal-bow.png",
+    imageurl: "https://i.postimg.cc/dVGsHT7y/pink-tulle-ballgown-crystal-bow.png"
   },
   {
     id: 20,
@@ -233,7 +254,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "women",
-    image: "/womens/black-one-shoulder-draped-midi-dress.png"
+    image: "/womens/black-one-shoulder-draped-midi-dress.png",
+    imageurl: "https://i.postimg.cc/Y2yCh7K6/black-one-shoulder-draped-midi-dress.png"
   },
   {
     id: 21,
@@ -244,7 +266,8 @@ export const products = [
     rating: 4.5,
     category: "topwear",
     range: "women",
-    image: "/womens/powder-blue-puff-sleeve-crop-top-midi-skirt-set.png"
+    image: "/womens/powder-blue-puff-sleeve-crop-top-midi-skirt-set.png",
+    imageurl: "https://i.postimg.cc/bw1yC2Gb/powder-blue-puff-sleeve-crop-top-midi-skirt-set.png"
   },
   {
     id: 22,
@@ -255,7 +278,8 @@ export const products = [
     rating: 4.8,
     category: "topwear",
     range: "women",
-    image: "/womens/sage-green-textured-tweed-suit.png"
+    image: "/womens/sage-green-textured-tweed-suit.png",
+    imageurl: "https://i.postimg.cc/HkbYZ7Jv/sage-green-textured-tweed-suit.png"
   },
   {
     id: 23,
@@ -266,7 +290,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "women",
-    image: "/womens/lavender-ombre-one-shoulder-gown.png"
+    image: "/womens/lavender-ombre-one-shoulder-gown.png",
+    imageurl: "https://i.postimg.cc/vZ5Yq61c/lavender-ombre-one-shoulder-gown.png"
   },
   {
     id: 24,
@@ -277,7 +302,8 @@ export const products = [
     rating: 4.8,
     category: "bottomwear",
     range: "women",
-    image: "/womens/coral-ombre-sequin-lehenga-set.png"
+    image: "/womens/coral-ombre-sequin-lehenga-set.png",
+    imageurl: "https://i.postimg.cc/9FRF9kCK/coral-ombre-sequin-lehenga-set.png"
   },
   {
     id: 25,
@@ -288,7 +314,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "women",
-    image: "/womens/emerald-brocade-embroidered-kurta-set.png"
+    image: "/womens/emerald-brocade-embroidered-kurta-set.png",
+    imageurl: "https://i.postimg.cc/rF0F4HMB/emerald-brocade-embroidered-kurta-set.png"
   },
   {
     id: 26,
@@ -299,7 +326,8 @@ export const products = [
     rating: 4.8,
     category: "topwear",
     range: "women",
-    image: "/womens/ivory-satin-jumpsuit-embellished-cape.png"
+    image: "/womens/ivory-satin-jumpsuit-embellished-cape.png",
+    imageurl: "https://i.postimg.cc/zXsDFkf3/ivory-satin-jumpsuit-embellished-cape.png"
   },
   {
     id: 27,
@@ -310,7 +338,8 @@ export const products = [
     rating: 4.9,
     category: "topwear",
     range: "women",
-    image: "/womens/navy-celestial-corset-satin-dress.png"
+    image: "/womens/navy-celestial-corset-satin-dress.png",
+    imageurl: "https://i.postimg.cc/g23zS6wx/navy-celestial-corset-satin-dress.png"
   },
   {
     id: 28,
@@ -321,7 +350,8 @@ export const products = [
     rating: 4.6,
     category: "topwear",
     range: "women",
-    image: "/womens/golden-satin-embroidered-kaftan-dress.png"
+    image: "/womens/golden-satin-embroidered-kaftan-dress.png",
+    imageurl: "https://i.postimg.cc/4ND4Q13d/golden-satin-embroidered-kaftan-dress.png"
   },
   {
     id: 29,
@@ -332,7 +362,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "women",
-    image: "/womens/black-velvet-suit-set.png"
+    image: "/womens/black-velvet-suit-set.png",
+    imageurl: "https://i.postimg.cc/PrprD7dG/black-velvet-suit-set.png"
   },
   {
     id: 30,
@@ -343,7 +374,8 @@ export const products = [
     rating: 4.3,
     category: "topwear",
     range: "women",
-    image: "/womens/silver-satin-slip-dress.png"
+    image: "/womens/silver-satin-slip-dress.png",
+    imageurl: "https://i.postimg.cc/fRYz203p/silver-satin-slip-dress.png"
   },
   {
     id: 31,
@@ -354,7 +386,8 @@ export const products = [
     rating: 4.8,
     category: "bottomwear",
     range: "women",
-    image: "/womens/gold-sequin-mirror-work-blouse-silk-skirt-set.png"
+    image: "/womens/gold-sequin-mirror-work-blouse-silk-skirt-set.png",
+    imageurl: "https://i.postimg.cc/jdpq4hjd/gold-sequin-mirror-work-blouse-silk-skirt-set.png"
   },
   {
     id: 32,
@@ -365,7 +398,8 @@ export const products = [
     rating: 4.9,
     category: "topwear",
     range: "women",
-    image: "/womens/ruby-red-sequin-gown.png"
+    image: "/womens/ruby-red-sequin-gown.png",
+    imageurl: "https://i.postimg.cc/Z56b7y9j/ruby-red-sequin-gown.png"
   },
 
   // ============================================
@@ -380,7 +414,8 @@ export const products = [
     rating: 4.8,
     category: "topwear",
     range: "kids",
-    image: "/kids/navy-satin-lapel-tux-jacket.png"
+    image: "/kids/navy-satin-lapel-tux-jacket.png",
+    imageurl: "https://i.postimg.cc/C17dvn20/navy-satin-lapel-tux-jacket.png"
   },
   {
     id: 34,
@@ -391,7 +426,8 @@ export const products = [
     rating: 4.4,
     category: "bottomwear",
     range: "kids",
-    image: "/kids/navy-shirt-shorts-set.png"
+    image: "/kids/navy-shirt-shorts-set.png",
+    imageurl: "https://i.postimg.cc/J0h0S4wV/navy-shirt-shorts-set.png"
   },
   {
     id: 35,
@@ -402,7 +438,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "kids",
-    image: "/kids/ivory-pearl-tulle-dress.png"
+    image: "/kids/ivory-pearl-tulle-dress.png",
+    imageurl: "https://i.postimg.cc/PxTPzQ25/ivory-pearl-tulle-dress.png"
   },
   {
     id: 36,
@@ -413,7 +450,8 @@ export const products = [
     rating: 4.5,
     category: "topwear",
     range: "kids",
-    image: "/kids/mustard-ruffle-top-pleated-skirt-set.png"
+    image: "/kids/mustard-ruffle-top-pleated-skirt-set.png",
+    imageurl: "https://i.postimg.cc/xC5qsN45/mustard-ruffle-top-pleated-skirt-set.png"
   },
   {
     id: 37,
@@ -424,7 +462,8 @@ export const products = [
     rating: 4.6,
     category: "topwear",
     range: "kids",
-    image: "/kids/pastel-floral-organza-dress.png"
+    image: "/kids/pastel-floral-organza-dress.png",
+    imageurl: "https://i.postimg.cc/HnPnmDHx/pastel-floral-organza-dress.png"
   },
   {
     id: 38,
@@ -435,7 +474,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "kids",
-    image: "/kids/cream-tweed-jacket-skirt-set.png"
+    image: "/kids/cream-tweed-jacket-skirt-set.png",
+    imageurl: "https://i.postimg.cc/63tyLfYy/cream-tweed-jacket-skirt-set.png"
   },
   {
     id: 39,
@@ -446,7 +486,8 @@ export const products = [
     rating: 4.6,
     category: "topwear",
     range: "kids",
-    image: "/kids/navy-star-sparkle-dress.png"
+    image: "/kids/navy-star-sparkle-dress.png",
+    imageurl: "https://i.postimg.cc/MHGHgKk8/navy-star-sparkle-dress.png"
   },
   {
     id: 40,
@@ -457,7 +498,8 @@ export const products = [
     rating: 4.5,
     category: "topwear",
     range: "kids",
-    image: "/kids/lilac-pearl-belt-jumpsuit.png"
+    image: "/kids/lilac-pearl-belt-jumpsuit.png",
+    imageurl: "https://i.postimg.cc/k4sDjRpK/lilac-pearl-belt-jumpsuit.png"
   },
   {
     id: 41,
@@ -468,7 +510,8 @@ export const products = [
     rating: 4.4,
     category: "bottomwear",
     range: "kids",
-    image: "/kids/butter-linen-suit-set.png"
+    image: "/kids/butter-linen-suit-set.png",
+    imageurl: "https://i.postimg.cc/fLDJjfBL/butter-linen-suit-set.png"
   },
   {
     id: 42,
@@ -479,7 +522,8 @@ export const products = [
     rating: 4.4,
     category: "bottomwear",
     range: "kids",
-    image: "/kids/plaid-vest-trousers-set.png"
+    image: "/kids/plaid-vest-trousers-set.png",
+    imageurl: "https://i.postimg.cc/NFPFtqY9/plaid-vest-trousers-set.png"
   },
   {
     id: 43,
@@ -490,7 +534,8 @@ export const products = [
     rating: 4.8,
     category: "topwear",
     range: "kids",
-    image: "/kids/royal-blue-embroidered-kurta-set.png"
+    image: "/kids/royal-blue-embroidered-kurta-set.png",
+    imageurl: "https://i.postimg.cc/J0d08Vm5/royal-blue-embroidered-kurta-set.png"
   },
   {
     id: 44,
@@ -501,7 +546,8 @@ export const products = [
     rating: 4.3,
     category: "bottomwear",
     range: "kids",
-    image: "/kids/olive-utility-jacket-cargo-set.png"
+    image: "/kids/olive-utility-jacket-cargo-set.png",
+    imageurl: "https://i.postimg.cc/J0h0S4ws/olive-utility-jacket-cargo-set.png"
   },
   {
     id: 45,
@@ -512,7 +558,8 @@ export const products = [
     rating: 4.9,
     category: "topwear",
     range: "kids",
-    image: "/kids/burgundy-velvet-tuxedo.png"
+    image: "/kids/burgundy-velvet-tuxedo.png",
+    imageurl: "https://i.postimg.cc/wvg7cQ0x/burgundy-velvet-tuxedo.png"
   },
   {
     id: 46,
@@ -523,7 +570,8 @@ export const products = [
     rating: 4.2,
     category: "bottomwear",
     range: "kids",
-    image: "/kids/white-shirt-black-leggings-set.png"
+    image: "/kids/white-shirt-black-leggings-set.png",
+    imageurl: "https://i.postimg.cc/sx0xzdyn/white-shirt-black-leggings-set.png"
   },
   {
     id: 47,
@@ -534,7 +582,8 @@ export const products = [
     rating: 4.7,
     category: "topwear",
     range: "kids",
-    image: "/kids/navy-double-breasted-suit.png"
+    image: "/kids/navy-double-breasted-suit.png",
+    imageurl: "https://i.postimg.cc/ZRH0fvMQ/navy-double-breasted-suit.png"
   },
   {
     id: 48,
@@ -545,7 +594,8 @@ export const products = [
     rating: 4.5,
     category: "topwear",
     range: "kids",
-    image: "/kids/blush-embroidered-bow-dress.png"
+    image: "/kids/blush-embroidered-bow-dress.png",
+    imageurl: "https://i.postimg.cc/LszJ1bkC/blush-embroidered-bow-dress.png"
   }
 ];
 
