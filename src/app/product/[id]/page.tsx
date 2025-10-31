@@ -1,3 +1,4 @@
+/* eslint react/no-unescaped-entities: "off" */
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -13,6 +14,7 @@ import AuthModal from '@/_components/AuthModal';
 import Popup from '@/_components/Popup';
 import ConfirmationPopup from '@/_components/ConfirmationPopup';
 import { getProductById } from '@/data/products';
+import { Product } from '@/types/product';
 import { useAuth } from '@clerk/nextjs';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -115,7 +117,8 @@ const ProductDetailPage: React.FC = () => {
   
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMessage, setAuthMessage] = useState('');
+  // Remove unused setter to satisfy @typescript-eslint/no-unused-vars
+  const [authMessage] = useState('');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
@@ -128,7 +131,7 @@ const ProductDetailPage: React.FC = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   
   // Fetch product data from centralized source
-  const product = getProductById(productId);
+  const product = getProductById(productId) as Product | undefined;
   
   // Set the initial product image URL
   React.useEffect(() => {
@@ -268,11 +271,10 @@ const ProductDetailPage: React.FC = () => {
     if (!file || !product) return;
 
     setIsProcessingTryOn(true);
-    setLoadingMessage(loadingMessages[0]); // Start with the first message
-    setShowPopup(false); // Close any existing popup
+    setLoadingMessage(loadingMessages[0]);
+    setShowPopup(false);
 
     try {
-      // Convert the user's file to a Base64 Data URL
       const reader = new FileReader();
       reader.onloadend = async () => {
         try {
@@ -301,32 +303,30 @@ const ProductDetailPage: React.FC = () => {
             setIsProcessingTryOn(false);
             throw new Error(result.error || 'Failed to process virtual try-on');
           }
-        } catch (error: any) {
-          console.error('Virtual Try-On Error:', error);
-          // Close loading popup
+        } catch (error: unknown) {
+          const err = error instanceof Error ? error : new Error('Unknown error');
+          console.error('Virtual Try-On Error:', err);
           setIsProcessingTryOn(false);
-          
-          // Show a random error message in the regular popup
           const randomErrorMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
           setPopupMessage(randomErrorMessage);
           setPopupType('error');
           setShowPopup(true);
+        } finally {
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
         }
       };
-      
       reader.readAsDataURL(file);
-    } catch (error: any) {
-      console.error('File Reading Error:', error);
-      // Close loading popup even if file reading fails
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error : new Error('Unknown error');
+      console.error('File Reading Error:', err);
       setIsProcessingTryOn(false);
-      
-      // Show a random error message in the regular popup
       const randomErrorMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
       setPopupMessage(randomErrorMessage);
       setPopupType('error');
       setShowPopup(true);
     } finally {
-      // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }

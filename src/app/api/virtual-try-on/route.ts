@@ -99,11 +99,12 @@ export async function POST(req: NextRequest) {
       throw new Error(`API did not return a valid image. Raw response: ${JSON.stringify(data)}`);
     }
 
-  } catch (error: any) {
-    console.error("Virtual Try-On Error:", error);
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error("Virtual Try-On Error:", err);
     return new Response(
       JSON.stringify({ 
-        error: `Failed to generate try-on image: ${error.message}`
+        error: `Failed to generate try-on image: ${err.message}`
       }),
       { 
         status: 500,

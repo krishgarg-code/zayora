@@ -6,17 +6,18 @@ import { motion } from 'framer-motion';
 import AnimatedItem from './AnimatedItem';
 import PriceTag from './PriceTag';
 import { getAllProducts } from '@/data/products';
+import { Product } from '@/types/product';
 
 // We'll select random products from the catalog
 const CurateStyleSection: React.FC = () => {
-  const [randomProducts, setRandomProducts] = useState<any[]>([]);
-  const [selectedProductForNavigation, setSelectedProductForNavigation] = useState<any>(null);
+  const [randomProducts, setRandomProducts] = useState<Product[]>([]);
+  const [selectedProductForNavigation, setSelectedProductForNavigation] = useState<Product | null>(null);
 
   // Function to get random products from the catalog
-  const getRandomProducts = () => {
-    const allProducts = getAllProducts();
+  const getRandomProducts = (): Product[] => {
+    const allProducts = getAllProducts() as Product[];
     const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 4);
+    return shuffled.slice(0, 4) as Product[];
   };
 
   // Initialize random products on component mount
@@ -30,7 +31,7 @@ const CurateStyleSection: React.FC = () => {
   }, []);
 
   const CurateCard: React.FC<{ 
-    product: any;
+    product: Product;
     cardIndex: number;
   }> = ({
     product,
@@ -100,13 +101,6 @@ const CurateStyleSection: React.FC = () => {
         </Link>
       </div>
     );
-  };
-
-  // Handle main "Indulge Now" button click - navigate to the first random product
-  const handleMainIndulgeNow = () => {
-    if (selectedProductForNavigation) {
-      window.location.href = `/product/${selectedProductForNavigation.id}`;
-    }
   };
 
   return (
