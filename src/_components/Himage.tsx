@@ -9,9 +9,6 @@ interface OvalImageFrameProps {
 }
 
 export default function OvalImageFrame({ src, alt, className = "" }: OvalImageFrameProps) {
-  // Check if src is empty or null and provide a fallback
-  const validSrc = src && src !== "" ? src : "/file.svg"; // Using an existing small SVG as fallback
-  
   // Don't render the component if src is empty
   if (!src || src === "") {
     return (

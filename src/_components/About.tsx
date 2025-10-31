@@ -25,7 +25,7 @@ const AboutUs = () => {
 
           <div className="pt-12">
             <p className="text-base font-light leading-relaxed ">
-              At <span className='font-bold'>Zayora</span>, luxury is more than a label — it's a lifestyle.
+              At <span className='font-bold'>Zayora</span>, luxury is more than a label — it&apos;s a lifestyle.
               We craft timeless pieces that celebrate individuality, sophistication, and modern elegance. Designed for men, women, and kids, every collection embodies the art of effortless style and refined comfort.
             </p>
 

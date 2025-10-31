@@ -11,7 +11,6 @@ import { Product } from '@/types/product';
 // We'll select random products from the catalog
 const CurateStyleSection: React.FC = () => {
   const [randomProducts, setRandomProducts] = useState<Product[]>([]);
-  const [selectedProductForNavigation, setSelectedProductForNavigation] = useState<Product | null>(null);
 
   // Function to get random products from the catalog
   const getRandomProducts = (): Product[] => {
@@ -24,10 +23,6 @@ const CurateStyleSection: React.FC = () => {
   useEffect(() => {
     const products = getRandomProducts();
     setRandomProducts(products);
-    // Select the first product for the main "Indulge Now" button navigation
-    if (products.length > 0) {
-      setSelectedProductForNavigation(products[0]);
-    }
   }, []);
 
   const CurateCard: React.FC<{ 
