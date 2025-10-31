@@ -1,204 +1,148 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@clerk/nextjs';
-import Link from 'next/link';
-import OrderCard from '@/_components/OrderCard';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { SignIn, SignUp } from '@clerk/nextjs';
+import { products } from '../../data/products';
+import Image from 'next/image';
 
-interface OrderItem {
-  id: string;
-  quantity: number;
-  price: string;
-  size?: string;
-  product: {
-    id: string;
-    name: string;
-    image: string;
-    price: string;
-  };
-}
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  total: string;
-  status: string;
-  createdAt: string;
-  orderItems: OrderItem[];
-}
-
-interface TransformedOrder {
-  id: string;
-  orderNumber: string;
-  date: string;
-  totalAmount: string;
-  status: string;
-  orderItems: {
-    id: string;
-    quantity: number;
-    size?: string;
-    product: {
-      id: number;
-      name: string;
-      price: string;
-      image?: string;
-    };
-  }[];
-}
-
-export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
-
-  const { isLoaded, isSignedIn } = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    if (!isSignedIn) {
-      router.push('/auth');
-      return;
-    }
-
-    fetchOrders();
-  }, [isLoaded, isSignedIn, router]);
-
-  const fetchOrders = async () => {
+export default function AuthPage() {
+  // Determine mode from client URL search params to avoid server/client mismatch
+  const [isSignUp, setIsSignUp] = React.useState(false);
+  React.useEffect(() => {
     try {
-      setLoading(true);
-      const response = await fetch('/api/orders');
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch orders');
-      }
-
-      const data = await response.json();
-      setOrders(data.orders);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
+      const params = new URLSearchParams(window.location.search);
+      setIsSignUp(params.get('mode') === 'sign-up');
+    } catch {
+      // fallback: not running in browser or malformed URL
+      setIsSignUp(false);
     }
+  }, []);
+
+  const getRandomProducts = () => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 6);
   };
-
-  const toggleOrderExpansion = (orderId: string) => {
-    setExpandedOrders(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(orderId)) {
-        newSet.delete(orderId);
-      } else {
-        newSet.add(orderId);
-      }
-      return newSet;
-    });
-  };
-
-  const transformOrder = (order: Order): TransformedOrder => {
-    return {
-      id: order.id,
-      orderNumber: order.orderNumber,
-      date: new Date(order.createdAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }),
-      totalAmount: `₹${parseFloat(order.total).toFixed(2)}`,
-      status: order.status,
-      orderItems: order.orderItems.map(item => ({
-        id: item.id,
-        quantity: item.quantity,
-        size: item.size,
-        product: {
-          id: parseInt(item.product.id),
-          name: item.product.name,
-          price: `₹${parseFloat(item.product.price).toFixed(2)}`,
-          image: item.product.image
-        }
-      }))
-    };
-  };
-
-  if (!isLoaded || loading) {
-    return (
-      <div className="min-h-screen bg-[#322e2c] flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#dab187]"></div>
-          <p className="mt-4 text-[#dab187] text-lg">Loading orders...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-[#322e2c] flex items-center justify-center">
-        <div className="text-center max-w-md">
-          <svg className="mx-auto h-12 w-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h2 className="mt-4 text-2xl font-semibold text-white">Error Loading Orders</h2>
-          <p className="mt-2 text-white/70">{error}</p>
-          <button
-            onClick={fetchOrders}
-            className="mt-6 px-6 py-3 bg-[#dab187] text-[#322e2c] rounded-lg hover:bg-[#c9a676] transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const [showcaseProducts] = React.useState(getRandomProducts());
 
   return (
-    <div className="min-h-screen bg-[#322e2c]">
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <Link 
-            href="/"
-            className="inline-flex items-center text-[#dab187] hover:text-white transition-colors mb-4"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-          </Link>
-          <h1 className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Metanoia' }}>Your Orders</h1>
-          <p className="text-white/70">Track and manage your purchases</p>
-        </div>
+    <div className="w-full h-screen flex flex-col lg:flex-row bg-[#1f1c1a] text-white overflow-hidden relative">
+      {/* Decorative grid */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(218,177,135,0.08)_1px,transparent_1px)] [background-size:50px_50px] opacity-40 pointer-events-none" />
 
-        <div className="bg-[#2b2725] rounded-2xl p-6">
-          {orders.length === 0 ? (
-            <div className="text-center py-12">
-              <svg className="mx-auto h-24 w-24 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              <h3 className="mt-4 text-xl font-medium text-white">No orders yet</h3>
-              <p className="mt-2 text-white/70">Start shopping to see your orders here</p>
-              <Link
-                href="/"
-                className="mt-6 inline-block px-6 py-3 bg-[#dab187] text-[#322e2c] rounded-lg hover:bg-[#c9a676] transition-colors"
-              >
-                Start Shopping
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {orders.map((order) => (
-                <OrderCard
-                  key={order.id}
-                  order={transformOrder(order)}
-                  isExpanded={expandedOrders.has(order.id)}
-                  onToggle={() => toggleOrderExpansion(order.id)}
-                />
-              ))}
-            </div>
-          )}
+      {/* === LEFT SECTION - AUTH === */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7 }}
+        className="w-full lg:w-1/2 flex items-center justify-center bg-[#1f1c1a]/90 relative px-6 md:px-12 lg:px-20 py-10"
+      >
+        <div className="w-full max-w-md z-10 space-y-6">
+          {/* --- Custom Header --- */}
+          <div className="text-center mb-2">
+            <h2 className="text-3xl font-semibold text-[#dab187]">
+              {isSignUp ? 'Join the Zayora Family' : 'Welcome Back'}
+            </h2>
+            <p className="text-white/70 mt-1 text-sm">
+              {isSignUp
+                ? 'Create your account and start your journey with timeless fashion.'
+                : 'Sign in to continue your Zayora experience.'}
+            </p>
+          </div>
+
+          {/* --- Clerk Authentication --- */}
+          <div className="space-y-5 bg-[#2b2725]/50 p-6 rounded-2xl border border-[#3a3532]">
+            {isSignUp ? (
+              <SignUp
+                appearance={{
+                  elements: {
+                    card: 'bg-transparent shadow-none border-0',
+                    headerTitle: 'hidden',
+                    headerSubtitle: 'hidden',
+                    socialButtons: 'hidden',
+                    dividerText: 'hidden',
+                    formFieldInput:
+                      'w-full px-4 py-3 bg-[#2b2725] border border-[#3a3532] rounded-lg focus:ring-2 focus:ring-[#dab187] text-sm text-white',
+                    formButtonPrimary:
+                      'w-full py-3 mt-2 bg-[#dab187] hover:bg-[#c19d6f] text-[#1f1c1a] font-medium rounded-full transition-all text-sm shadow-lg shadow-[#dab187]/20',
+                    footerAction: 'hidden',
+                  },
+                }}
+                signInUrl="/auth"
+                routing="hash"
+              />
+            ) : (
+              <SignIn
+                appearance={{
+                  elements: {
+                    card: 'bg-transparent shadow-none border-0',
+                    headerTitle: 'hidden',
+                    headerSubtitle: 'hidden',
+                    socialButtons: 'hidden',
+                    dividerText: 'hidden',
+                    formFieldInput:
+                      'w-full px-4 py-3 bg-[#2b2725] border border-[#3a3532] rounded-lg focus:ring-2 focus:ring-[#dab187] text-sm text-white',
+                    formButtonPrimary:
+                      'w-full py-3 mt-2 bg-[#dab187] hover:bg-[#c19d6f] text-[#1f1c1a] font-medium rounded-full transition-all text-sm shadow-lg shadow-[#dab187]/20',
+                    footerAction: 'hidden',
+                  },
+                }}
+                signUpUrl="/auth?mode=sign-up"
+                routing="hash"
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </motion.div>
+
+      {/* === RIGHT SECTION - Infinite Floating Showcase === */}
+      <motion.div
+        initial={{ opacity: 0, x: 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7 }}
+        className="w-full lg:w-1/2 bg-[#201C1A] relative overflow-hidden flex items-center justify-center p-4 sm:p-6"
+      >
+        <div className="text-center max-w-md z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-10"
+          >
+            <h2 className="text-3xl sm:text-4xl font-semibold text-white">
+              Discover premium craftsmanship by{' '}
+              <span className="text-[#dab187]">Zayora.</span>
+            </h2>
+          </motion.div>
+
+          <div className="relative h-[500px] sm:h-[600px] w-full overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-[#201C1A] to-transparent z-20" />
+            <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-[#201C1A] to-transparent z-20" />
+            <motion.div
+              animate={{ y: ['0%', '-100%'] }}
+              transition={{ duration: 70, ease: 'linear', repeat: Infinity }}
+              className="flex flex-col items-center gap-6"
+            >
+              {[...showcaseProducts, ...showcaseProducts].map((product, i) => (
+                <div
+                  key={i}
+                  className={`relative w-48 sm:w-56 h-60 sm:h-64 rounded-2xl overflow-hidden border border-white/10 ${
+                    i % 2 === 0 ? 'self-start ml-4' : 'self-end mr-4'
+                  }`}
+                >
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
