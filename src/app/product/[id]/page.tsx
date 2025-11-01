@@ -13,6 +13,7 @@ import PriceTag from '@/_components/PriceTag';
 import AuthModal from '@/_components/AuthModal';
 import Popup from '@/_components/Popup';
 import ConfirmationPopup from '@/_components/ConfirmationPopup';
+import VirtualTryOnPopup from '@/_components/VirtualTryOnPopup';
 import { getProductById } from '@/data/products';
 import { Product } from '@/types/product';
 import { useAuth } from '@clerk/nextjs';
@@ -124,6 +125,7 @@ const ProductDetailPage: React.FC = () => {
   const [popupMessage, setPopupMessage] = useState('');
   const [popupType, setPopupType] = useState<'success' | 'error' | 'info' | 'warning'>('success');
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+  const [showVirtualTryOnPopup, setShowVirtualTryOnPopup] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
   const [isProcessingTryOn, setIsProcessingTryOn] = useState(false);
@@ -161,9 +163,8 @@ const ProductDetailPage: React.FC = () => {
   // Handle adding to cart
   const handleAddToWardrobe = async () => {
     if (!isSignedIn) {
-      setConfirmationMessage('Sign in to add items to your wardrobe');
-      setPendingAction(() => () => router.push('/auth'));
-      setShowConfirmationPopup(true);
+      // As per memory requirement, redirect directly to /auth without popup
+      router.push('/auth');
       return;
     }
 
@@ -212,9 +213,8 @@ const ProductDetailPage: React.FC = () => {
   // Handle Indulge Now (go to checkout)
   const handleIndulgeNow = async () => {
     if (!isSignedIn) {
-      setConfirmationMessage('Sign in to indulge in this product');
-      setPendingAction(() => () => router.push('/auth'));
-      setShowConfirmationPopup(true);
+      // As per memory requirement, redirect directly to /auth without popup
+      router.push('/auth');
       return;
     }
 
@@ -252,13 +252,18 @@ const ProductDetailPage: React.FC = () => {
   // Handle Virtual Try On
   const handleVirtualTryOn = () => {
     if (!isSignedIn) {
-      setConfirmationMessage('Sign in to access Virtual Try-On feature');
-      setPendingAction(() => () => router.push('/auth'));
-      setShowConfirmationPopup(true);
+      // As per memory requirement, redirect directly to /auth without popup
+      router.push('/auth');
       return;
     }
 
-    // Remove the size validation - virtual try-on should work without size selection
+    // Show the virtual try-on popup with guidelines
+    setShowVirtualTryOnPopup(true);
+  };
+
+  // Handle the actual try-on after reading guidelines
+  const handleTryOnConfirm = () => {
+    setShowVirtualTryOnPopup(false);
     // Trigger file input click
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -546,6 +551,13 @@ const ProductDetailPage: React.FC = () => {
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
           message={authMessage}
+        />
+
+        {/* Virtual Try-On Popup */}
+        <VirtualTryOnPopup
+          isOpen={showVirtualTryOnPopup}
+          onClose={() => setShowVirtualTryOnPopup(false)}
+          onTryOn={handleTryOnConfirm}
         />
 
         {/* Confirmation Popup */}
