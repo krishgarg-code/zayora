@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "./animations.css";
 
 @font-face {
   font-family: 'Metanoia';
@@ -16,9 +15,18 @@
   font-style: normal;
 }
 
+@theme {
+  --font-norwester: 'Norwester', sans-serif;
+  --font-metanoia: 'Metanoia', serif;
+}
+
 @layer utilities {
   .font-norwester {
-    font-family: 'Norwester', sans-serif;
+    font-family: var(--font-norwester);
+  }
+  
+  .font-metanoia {
+    font-family: var(--font-metanoia);
   }
 }
 
@@ -141,5 +149,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* Custom scroll animation - now handled by Framer Motion */

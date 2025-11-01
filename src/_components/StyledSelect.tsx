@@ -72,8 +72,7 @@ export default function StyledSelect({ options, value, onChange, className = '',
           aria-label={ariaLabel}
           onKeyDown={onKey}
           onClick={() => setOpen(v => !v)}
-          className="w-full text-left px-4 pr-10 py-3 bg-[#2E2B29] text-white border-2 border-[#C9B99E] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9B99E] focus:border-transparent transition-all duration-200 cursor-pointer"
-          style={{ fontFamily: 'norwester' }}
+          className="w-full text-left px-4 pr-10 py-3 bg-[#2E2B29] text-white border-2 border-[#C9B99E] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9B99E] focus:border-transparent transition-all duration-200 cursor-pointer font-norwester"
         >
           <span className="truncate">{selectedLabel}</span>
           <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#C9B99E]">
@@ -105,8 +104,7 @@ export default function StyledSelect({ options, value, onChange, className = '',
                   onChange(opt.value);
                   setOpen(false);
                 }}
-                className={`px-4 py-2 cursor-pointer ${isHighlighted ? 'bg-[#C9B99E]/20' : ''} ${isSelected ? 'font-semibold' : ''}`}
-                style={{ fontFamily: 'norwester' }}
+                className={`px-4 py-2 cursor-pointer ${isHighlighted ? 'bg-[#C9B99E]/20' : ''} ${isSelected ? 'font-semibold' : ''} font-norwester`}
               >
                 {opt.label}
               </div>

@@ -8,16 +8,41 @@ import Image from 'next/image';
 
 export default function AuthPage() {
   // Determine mode from client URL search params to avoid server/client mismatch
-  const [isSignUp, setIsSignUp] = React.useState(false);
-  React.useEffect(() => {
+  // Default to sign-up mode (true) instead of sign-in mode (false)
+  const [isSignUp, setIsSignUp] = React.useState(true);
+  
+  // Function to update auth mode based on URL
+  const updateAuthMode = React.useCallback(() => {
     try {
       const params = new URLSearchParams(window.location.search);
+      // Check if mode parameter is explicitly set to 'sign-up'
+      // If not, default to sign-in (false)
       setIsSignUp(params.get('mode') === 'sign-up');
     } catch {
       // fallback: not running in browser or malformed URL
-      setIsSignUp(false);
+      setIsSignUp(true); // Default to sign-up on error
     }
   }, []);
+
+  React.useEffect(() => {
+    // Initial update
+    updateAuthMode();
+    
+    // Set up an interval to periodically check for URL changes
+    // This is needed because Clerk's hash routing might not trigger standard events
+    const interval = setInterval(updateAuthMode, 100);
+    
+    // Also listen for standard events as a backup
+    window.addEventListener('popstate', updateAuthMode);
+    window.addEventListener('hashchange', updateAuthMode);
+    
+    // Cleanup
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('popstate', updateAuthMode);
+      window.removeEventListener('hashchange', updateAuthMode);
+    };
+  }, [updateAuthMode]);
 
   const getRandomProducts = () => {
     const shuffled = [...products].sort(() => 0.5 - Math.random());
@@ -65,7 +90,6 @@ export default function AuthPage() {
                       'w-full px-4 py-3 bg-[#2b2725] border border-[#3a3532] rounded-lg focus:ring-2 focus:ring-[#dab187] text-sm text-white',
                     formButtonPrimary:
                       'w-full py-3 mt-2 bg-[#dab187] hover:bg-[#c19d6f] text-[#1f1c1a] font-medium rounded-full transition-all text-sm shadow-lg shadow-[#dab187]/20',
-                    footerAction: 'hidden',
                   },
                 }}
                 signInUrl="/auth"
@@ -84,7 +108,6 @@ export default function AuthPage() {
                       'w-full px-4 py-3 bg-[#2b2725] border border-[#3a3532] rounded-lg focus:ring-2 focus:ring-[#dab187] text-sm text-white',
                     formButtonPrimary:
                       'w-full py-3 mt-2 bg-[#dab187] hover:bg-[#c19d6f] text-[#1f1c1a] font-medium rounded-full transition-all text-sm shadow-lg shadow-[#dab187]/20',
-                    footerAction: 'hidden',
                   },
                 }}
                 signUpUrl="/auth?mode=sign-up"
