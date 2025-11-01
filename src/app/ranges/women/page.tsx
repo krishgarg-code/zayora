@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import React, { useState } from 'react';
+import StyledSelect from '@/_components/StyledSelect';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -139,16 +140,18 @@ const WomenRangesPage: React.FC = () => {
                     <label className="block text-[#C9B99E] text-sm mb-2" style={{ fontFamily: 'norwester' }}>
                       SORT BY
                     </label>
-                    <select
-                      value={sortOption}
-                      onChange={(e) => setSortOption(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#2E2B29] border-2 border-[#C9B99E] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9B99E] focus:border-transparent transition-all duration-300 cursor-pointer"
-                      style={{ fontFamily: 'norwester' }}
-                    >
-                      <option value="" className="bg-[#2E2B29]">Default</option>
-                      <option value="priceLowToHigh" className="bg-[#2E2B29]">Price: Low to High</option>
-                      <option value="priceHighToLow" className="bg-[#2E2B29]">Price: High to Low</option>
-                    </select>
+                    <div className="relative">
+                      <StyledSelect
+                        options={[
+                          { value: '', label: 'Default' },
+                          { value: 'priceLowToHigh', label: 'Price: Low to High' },
+                          { value: 'priceHighToLow', label: 'Price: High to Low' },
+                        ]}
+                        value={sortOption}
+                        onChange={(v) => setSortOption(v)}
+                        ariaLabel="Sort products"
+                      />
+                    </div>
                   </div>
 
                   {/* Filter Dropdown */}
@@ -156,16 +159,18 @@ const WomenRangesPage: React.FC = () => {
                     <label className="block text-[#C9B99E] text-sm mb-2" style={{ fontFamily: 'norwester' }}>
                       FILTER BY
                     </label>
-                    <select
-                      value={filterCategory}
-                      onChange={(e) => setFilterCategory(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#2E2B29] border-2 border-[#C9B99E] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9B99E] focus:border-transparent transition-all duration-300 cursor-pointer"
-                      style={{ fontFamily: 'norwester' }}
-                    >
-                      <option value="" className="bg-[#2E2B29]">All Categories</option>
-                      <option value="topwear" className="bg-[#2E2B29]">Topwear</option>
-                      <option value="bottomwear" className="bg-[#2E2B29]">Bottomwear</option>
-                    </select>
+                    <div className="relative">
+                      <StyledSelect
+                        options={[
+                          { value: '', label: 'All Categories' },
+                          { value: 'topwear', label: 'Topwear' },
+                          { value: 'bottomwear', label: 'Bottomwear' },
+                        ]}
+                        value={filterCategory}
+                        onChange={(v) => setFilterCategory(v)}
+                        ariaLabel="Filter products"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
