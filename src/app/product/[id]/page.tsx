@@ -14,6 +14,7 @@ import AuthModal from '@/_components/AuthModal';
 import Popup from '@/_components/Popup';
 import ConfirmationPopup from '@/_components/ConfirmationPopup';
 import VirtualTryOnPopup from '@/_components/VirtualTryOnPopup';
+import AuthConfirmationPopup from '@/_components/AuthConfirmationPopup';
 import { getProductById } from '@/data/products';
 import { Product } from '@/types/product';
 import { useAuth } from '@clerk/nextjs';
@@ -118,7 +119,8 @@ const ProductDetailPage: React.FC = () => {
   
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [showAuthModal, setShowAuthModal] = useState(false);
-  // Remove unused setter to satisfy @typescript-eslint/no-unused-vars
+  const [showAuthConfirmation, setShowAuthConfirmation] = useState(false);
+  const [authRedirectUrl, setAuthRedirectUrl] = useState<string>('');
   const [authMessage] = useState('');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -163,8 +165,9 @@ const ProductDetailPage: React.FC = () => {
   // Handle adding to cart
   const handleAddToWardrobe = async () => {
     if (!isSignedIn) {
-      // As per memory requirement, redirect directly to /auth without popup
-      router.push('/auth');
+      // Show auth confirmation popup instead of direct redirect
+      setAuthRedirectUrl(window.location.pathname); // Set the current URL for redirect
+      setShowAuthConfirmation(true);
       return;
     }
 
@@ -213,8 +216,9 @@ const ProductDetailPage: React.FC = () => {
   // Handle Indulge Now (go to checkout)
   const handleIndulgeNow = async () => {
     if (!isSignedIn) {
-      // As per memory requirement, redirect directly to /auth without popup
-      router.push('/auth');
+      // Show auth confirmation popup instead of direct redirect
+      setAuthRedirectUrl(window.location.pathname); // Set the current URL for redirect
+      setShowAuthConfirmation(true);
       return;
     }
 
@@ -252,8 +256,9 @@ const ProductDetailPage: React.FC = () => {
   // Handle Virtual Try On
   const handleVirtualTryOn = () => {
     if (!isSignedIn) {
-      // As per memory requirement, redirect directly to /auth without popup
-      router.push('/auth');
+      // Show auth confirmation popup instead of direct redirect
+      setAuthRedirectUrl(window.location.pathname); // Set the current URL for redirect
+      setShowAuthConfirmation(true);
       return;
     }
 
@@ -546,11 +551,15 @@ const ProductDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Auth Modal */}
-        <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-          message={authMessage}
+        {/* Auth Confirmation Popup */}
+        <AuthConfirmationPopup
+          isOpen={showAuthConfirmation}
+          onClose={() => setShowAuthConfirmation(false)}
+          onConfirm={() => setShowAuthConfirmation(false)}
+          title="Join Zayora"
+          message="Sign in to your account to access your wardrobe, save your favorite items, and enjoy personalized recommendations."
+          confirmText="Continue to Sign In"
+          redirectUrl={authRedirectUrl} // Pass the redirect URL
         />
 
         {/* Virtual Try-On Popup */}

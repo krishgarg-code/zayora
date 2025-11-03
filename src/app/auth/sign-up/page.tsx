@@ -5,13 +5,40 @@ import { motion } from 'framer-motion';
 import { SignUp } from '@clerk/nextjs';
 import { products } from '../../../data/products';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useAuth } from '@clerk/nextjs';
 
 export default function AuthSignUpPage() {
+  const [redirectUrl, setRedirectUrl] = React.useState<string | null>(null);
+  const { isSignedIn } = useAuth();
+  
   const getRandomProducts = () => {
     const shuffled = [...products].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 6);
   };
   const [showcaseProducts] = React.useState(getRandomProducts());
+
+  // Add effect to handle redirect after sign in
+  React.useEffect(() => {
+    // Check for redirect parameter
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const redirectParam = params.get('redirect');
+      if (redirectParam) {
+        setRedirectUrl(decodeURIComponent(redirectParam));
+      }
+    } catch {
+      // fallback: not running in browser or malformed URL
+    }
+  }, []);
+
+  // Add effect to handle redirect after sign in
+  React.useEffect(() => {
+    if (isSignedIn && redirectUrl) {
+      // Redirect to the original product page
+      window.location.href = redirectUrl;
+    }
+  }, [isSignedIn, redirectUrl]);
 
   return (
     <div className="w-full h-screen flex flex-col lg:flex-row bg-[#1f1c1a] text-white overflow-hidden relative">
@@ -44,6 +71,19 @@ export default function AuthSignUpPage() {
               signInUrl="/auth"
               routing="hash"
             />
+          </div>
+
+          {/* Back to Home Button */}
+          <div className="text-center mt-6">
+            <Link 
+              href="/" 
+              className="inline-flex items-center text-[#dab187] hover:text-[#c19d6f] transition-colors text-sm font-medium"
+            >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Home
+            </Link>
           </div>
         </div>
       </motion.div>

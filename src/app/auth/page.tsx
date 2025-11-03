@@ -5,11 +5,15 @@ import { motion } from 'framer-motion';
 import { SignIn, SignUp } from '@clerk/nextjs';
 import { products } from '../../data/products';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useAuth } from '@clerk/nextjs';
 
 export default function AuthPage() {
   // Determine mode from client URL search params to avoid server/client mismatch
   // Default to sign-up mode (true) instead of sign-in mode (false)
   const [isSignUp, setIsSignUp] = React.useState(true);
+  const [redirectUrl, setRedirectUrl] = React.useState<string | null>(null);
+  const { isSignedIn } = useAuth();
   
   // Function to update auth mode based on URL
   const updateAuthMode = React.useCallback(() => {
@@ -28,6 +32,17 @@ export default function AuthPage() {
     // Initial update
     updateAuthMode();
     
+    // Check for redirect parameter
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const redirectParam = params.get('redirect');
+      if (redirectParam) {
+        setRedirectUrl(decodeURIComponent(redirectParam));
+      }
+    } catch {
+      // fallback: not running in browser or malformed URL
+    }
+    
     // Set up an interval to periodically check for URL changes
     // This is needed because Clerk's hash routing might not trigger standard events
     const interval = setInterval(updateAuthMode, 100);
@@ -43,6 +58,14 @@ export default function AuthPage() {
       window.removeEventListener('hashchange', updateAuthMode);
     };
   }, [updateAuthMode]);
+
+  // Add effect to handle redirect after sign in
+  React.useEffect(() => {
+    if (isSignedIn && redirectUrl) {
+      // Redirect to the original product page
+      window.location.href = redirectUrl;
+    }
+  }, [isSignedIn, redirectUrl]);
 
   const getRandomProducts = () => {
     const shuffled = [...products].sort(() => 0.5 - Math.random());
@@ -114,6 +137,19 @@ export default function AuthPage() {
                 routing="hash"
               />
             )}
+          </div>
+
+          {/* Back to Home Button */}
+          <div className="text-center">
+            <Link 
+              href="/" 
+              className="inline-flex items-center text-[#dab187] hover:text-[#c19d6f] transition-colors text-sm font-medium"
+            >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Home
+            </Link>
           </div>
         </div>
       </motion.div>
